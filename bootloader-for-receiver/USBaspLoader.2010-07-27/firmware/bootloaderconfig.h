@@ -132,7 +132,7 @@ these macros are defined, the boot loader usees them.
 
 #ifndef __ASSEMBLER__   /* assembler cannot parse function definitions */
 
-#define JUMPER_BIT  0   /* jumper is connected to this bit in port D, active low */
+#define JUMPER_BIT  0   /* jumper is connected to this bit in port B, active low */
 
 #ifndef MCUCSR          /* compatibility between ATMega8 and ATMega88 */
 #   define MCUCSR   MCUSR
@@ -141,6 +141,8 @@ these macros are defined, the boot loader usees them.
 static inline void  bootLoaderInit(void)
 {
     PORTB |= (1 << JUMPER_BIT);     /* activate pull-up */
+    boot_lock_bits_set_safe(_BV(BLB11)); /* Lock Device */
+
     if(!(MCUCSR & (1 << EXTRF)))    /* If this was not an external reset, ignore */
         leaveBootloader();
     if(PINB & _BV(JUMPER_BIT))   /* Bootloader button push */
