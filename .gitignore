@@ -9,3 +9,4 @@
 obj
 .dep
 *.d
+main.bin
